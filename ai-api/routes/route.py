@@ -1,33 +1,22 @@
 from flask import Blueprint
-from controllers.search_controller import search_controller
-from flask import Blueprint, jsonify
-from controllers.scraper_controller import run_scraper_pipeline
-search_bp = Blueprint("search", __name__)
+from controllers.text_detection_controller import detect_text_fake_news_controller
+from controllers.kb_controller import update_knowledge_base_controller
 
-def init_search_routes(collection, transformer, nli):
-    @search_bp.route("/search", methods=["POST"])
+def create_routes(collection, transformer, nli):
+    bp = Blueprint("main", __name__)
+
+    # ======================
+    # SEARCH
+    # ======================
+    @bp.route("/search", methods=["POST"])
     def search():
-        return search_controller(collection, transformer, nli)
+        return detect_text_fake_news_controller(collection, transformer, nli)
 
-    return search_bp
-
-def init_scrape_routes(collection, transformer):
-    scrape_bp = Blueprint("scrape", __name__)
-
-    @scrape_bp.route("/scrape", methods=["POST"])
+    # ======================
+    # SCRAPER
+    # ======================
+    @bp.route("/scrape", methods=["POST"])
     def scrape():
-        try:
-            run_scraper_pipeline(transformer, collection, batch_size=32)
+        return update_knowledge_base_controller(transformer, collection)
 
-            return jsonify({
-                "status": "success",
-                "message": "Scraping dan insert ke DB & Chroma selesai."
-            }), 200
-
-        except Exception as e:
-            return jsonify({
-                "status": "error",
-                "message": str(e)
-            }), 500
-
-    return scrape_bp
+    return bp

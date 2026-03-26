@@ -1,0 +1,1 @@
+# def detect_image_fake_controller(): 

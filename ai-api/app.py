@@ -1,6 +1,6 @@
 # app.py
 from flask import Flask
-from routes.route import init_search_routes, init_scrape_routes
+from routes.route import create_routes
 from config.chroma_config import get_chroma_collection
 from config.transformer_config import  get_transformer_model
 from config.nli_config import  get_nli_model
@@ -26,11 +26,10 @@ nli = get_nli_model()
 # ==============================
 # REGISTER ROUTES
 # ==============================
-search_bp = init_search_routes(collection, transformer,nli)  
-scrape_bp = init_scrape_routes(collection, transformer)
+bp = create_routes(collection, transformer, nli)
 
-app.register_blueprint(search_bp)
-app.register_blueprint(scrape_bp)
+
+app.register_blueprint(bp)
 
 # ==============================
 # RUN APP
