@@ -2,7 +2,7 @@ from flask import Blueprint
 from controllers.text_detection_controller import detect_text_fake_news_controller
 from controllers.kb_controller import update_knowledge_base_controller
 
-def create_routes(collection, transformer, nli):
+def create_routes(collection, transformer, nli,client):
     bp = Blueprint("main", __name__)
 
     # ======================
@@ -10,7 +10,7 @@ def create_routes(collection, transformer, nli):
     # ======================
     @bp.route("/search", methods=["POST"])
     def search():
-        return detect_text_fake_news_controller(collection, transformer, nli)
+        return detect_text_fake_news_controller(collection, transformer, nli,client)
 
     # ======================
     # SCRAPER
