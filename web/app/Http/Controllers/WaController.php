@@ -7,6 +7,8 @@ use Illuminate\Support\Facades\Http;
 use App\Models\MessageCache;
 use App\Models\User;
 use Carbon\Carbon;
+use Illuminate\Support\Facades\Auth;
+use App\Models\User;
 
 class WaController extends Controller
 {
@@ -80,5 +82,32 @@ class WaController extends Controller
                 'error' => $e->getMessage()
             ], 500);
         }
+    }
+
+    public function linkWhatsApp(Request $request)
+    {
+        // 1. Validasi inputan form dari web
+        $request->validate([
+            'wa_number' => 'required|numeric'
+        ]);
+
+        /** @var \App\Models\User $currentUser */
+        $currentUser = Auth::user();
+        $waNumber = $request->wa_number;
+
+        // 2. Cek apakah ada akun di DB yang udah pake nomor WA ini
+        $existingUser = User::where('phone_number', $waNumber)->first();
+
+        // 3. LOGIKA KETUA: Kalau akunnya ada DAN itu bukan akun yang lagi login sekarang -> HAPUS!
+        if ($existingUser && $existingUser->id !== $currentUser->id) {
+            $existingUser->delete(); 
+        }
+
+        // 4. "Kalau ga ada ya create biasa aja" -> Update nomor WA ke akun yang sekarang login
+        $currentUser->phone_number = $waNumber;
+        $currentUser->save();
+
+        // 5. Kembalikan ke halaman web sebelumnya dengan pesan sukses
+        return back()->with('success', 'Nomor WhatsApp berhasil disambungkan!');
     }
 }
