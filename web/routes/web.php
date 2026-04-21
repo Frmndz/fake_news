@@ -2,15 +2,33 @@
 
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AdminController;
-use App\Http\Controllers\UserController;
+use App\Http\Controllers\LoginController;
 use App\Http\Controllers\RiwayatController;
+use App\Http\Controllers\PencarianController;
 use App\Http\Controllers\WaController;
 
 Route::get('/', function () {
     return view('landing_page.landing');
-});
+})->name('landing');
 
-Route::get('/admin/dashboard', [AdminController::class, 'dashboard']);
+// Login
+Route::get('/masuk', [LoginController::class, 'showLoginForm'])->name('login');
+Route::post('/masuk', [LoginController::class, 'login'])->name('login.post');
+Route::post('/keluar', [LoginController::class, 'logout'])->name('logout');
+
+Route::get('/admin/dashboard', [AdminController::class, 'dashboard'])->name('dashboard');
+
+// Pencarian 
+
+    Route::get('/pencarian', [PencarianController::class, 'index'])->name('beranda');
+    Route::post('/telusuri', [PencarianController::class, 'telusuri'])->name('telusuri');
+    Route::post('/telusuri-gambar', [PencarianController::class, 'telusuriGambar'])->name('telusuri.gambar');
+    Route::get('/dapatkan-whatsapp', function () {
+        return view('whatsapp');
+    })->name('whatsapp.page');
+
+
+
 
 // RIWAYAT
 Route::get('/admin/riwayat', [RiwayatController::class, 'index']);
