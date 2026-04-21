@@ -8,7 +8,6 @@ use App\Models\MessageCache;
 use App\Models\User;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Auth;
-use App\Models\User;
 
 class WaController extends Controller
 {
