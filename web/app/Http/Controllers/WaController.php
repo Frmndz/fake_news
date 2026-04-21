@@ -8,7 +8,7 @@ use App\Models\MessageCache;
 use App\Models\User;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Auth;
-use App\Models\User;
+use Illuminate\Support\Facades\Log;
 
 class WaController extends Controller
 {
@@ -20,8 +20,7 @@ class WaController extends Controller
             $message = trim(strtolower($request->input('message')));
             $name = $request->input('name');
 
-            // 🔥 1. CEK / CREATE USER
-            $user = User::firstOrCreate(
+            User::firstOrCreate(
                 ['phone_number' => $sender],
                 ['name' => $name ?? 'User WA']
             );
@@ -73,7 +72,7 @@ class WaController extends Controller
 
         } catch (\Exception $e) {
 
-            \Log::error('ERROR WA', [
+            Log::error('ERROR WA', [
                 'msg' => $e->getMessage(),
                 'line' => $e->getLine()
             ]);
