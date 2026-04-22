@@ -7,7 +7,7 @@ use App\Http\Controllers\RiwayatController;
 use App\Http\Controllers\PencarianController;
 use App\Http\Controllers\UmpanBalikController;
 use App\Http\Controllers\WaController;
-use App\Http\Controllers\ApiController;
+
 use App\Http\Controllers\AuthController;
 
 Route::get('/', function () {
@@ -55,7 +55,6 @@ Route::middleware(['auth', 'admin'])->prefix('admin')->group(function () {
 });
 
 Route::any('/wa-webhook', [WaController::class, 'webhook']);
-Route::post('/detect-hoax', [ApiController::class, 'detectHoax']);
 
 //login menggunakan wa di web
 Route::get('/login-wa', [AuthController::class, 'showPhoneForm']);
