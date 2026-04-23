@@ -73,3 +73,7 @@ Route::middleware(['auth'])->group(function () {
     // Route buat nyambungin WA
     Route::post('/link-wa', [WaController::class, 'linkWhatsApp'])->name('wa.link');
 });
+
+// Route untuk Google Auth
+Route::get('/auth/google/redirect', [GoogleAuthController::class, 'redirect'])->name('google.redirect');
+Route::get('/auth/google/callback', [GoogleAuthController::class, 'callback'])->name('google.callback');
