@@ -13,6 +13,7 @@ use App\Http\Controllers\WaController;
 use App\Http\Controllers\Api\HoaxDetectionController;
 use App\Http\Controllers\GoogleAuthController;
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\ApiController;
 
 /*
 |--------------------------------------------------------------------------
@@ -20,6 +21,7 @@ use App\Http\Controllers\AuthController;
 |--------------------------------------------------------------------------
 */
 
+// Landing Page
 Route::get('/', function () {
     return view('landing_page.landing');
 })->name('landing');
@@ -29,7 +31,7 @@ Route::get('/pencarian', [PencarianController::class, 'index'])->name('beranda')
 Route::post('/telusuri', [PencarianController::class, 'telusuri'])->name('telusuri');
 Route::post('/telusuri-gambar', [PencarianController::class, 'telusuriGambar'])->name('telusuri.gambar');
 
-// WhatsApp page
+// WhatsApp Page
 Route::get('/dapatkan-whatsapp', function () {
     return view('whatsapp');
 })->name('whatsapp.page');
@@ -47,7 +49,7 @@ Route::post('/api/detect-text', [HoaxDetectionController::class, 'detectText']);
 |--------------------------------------------------------------------------
 */
 
-// Login web
+// Login Web
 Route::get('/masuk', [LoginController::class, 'showLoginForm'])->name('login');
 Route::post('/masuk', [LoginController::class, 'login'])->name('login.post');
 Route::post('/keluar', [LoginController::class, 'logout'])->name('logout');
@@ -69,19 +71,19 @@ Route::prefix('auth/google')->group(function () {
 
 /*
 |--------------------------------------------------------------------------
-| ADMIN ROUTES
+| ADMIN ROUTES (PROTECTED)
 |--------------------------------------------------------------------------
 */
 
-Route::prefix('admin')->group(function () {
+Route::middleware(['auth', 'admin'])->prefix('admin')->group(function () {
 
     // Dashboard
     Route::get('/dashboard', [AdminController::class, 'dashboard'])->name('dashboard');
 
-    // User
+    // User Management
     Route::get('/user', [UserController::class, 'index']);
 
-    // Umpan balik
+    // Umpan Balik
     Route::get('/umpanbalik', [UmpanBalikController::class, 'index']);
 
     // Riwayat
@@ -91,16 +93,18 @@ Route::prefix('admin')->group(function () {
         Route::post('/update/{id}', [RiwayatController::class, 'update']);
         Route::get('/delete/{id}', [RiwayatController::class, 'delete']);
     });
+
 });
 
 
 /*
 |--------------------------------------------------------------------------
-| WHATSAPP WEBHOOK (NO AUTH)
+| WHATSAPP WEBHOOK & API (NO AUTH)
 |--------------------------------------------------------------------------
 */
 
 Route::any('/wa-webhook', [WaController::class, 'webhook']);
+Route::post('/detect-hoax', [ApiController::class, 'detectHoax']);
 
 
 /*
@@ -111,7 +115,7 @@ Route::any('/wa-webhook', [WaController::class, 'webhook']);
 
 Route::middleware(['auth'])->group(function () {
 
-    // Profile
+    // Update Profile
     Route::post('/profile/update', [UserController::class, 'updateProfile'])->name('profile.update');
 
     // Link WhatsApp
