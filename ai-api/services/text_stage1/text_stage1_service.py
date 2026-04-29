@@ -1,5 +1,5 @@
 from services.chroma_service import search_from_text
-from services.nli_service import run_nli
+from services.nli_service import run_nli_top_label
 from services.db_service import get_row_by_id
 from collections import Counter
 
@@ -27,7 +27,7 @@ def run_stage1_kb_check(collection, transformer, nli, query, top_k=1, gap_thresh
     print("CANDIDATE ROWS:", candidate_rows)
     pairs = [(query, row.get("title", "")) for row in candidate_rows]
     print("PAIRS UNTUK NLI:", pairs)
-    nli_scores = run_nli(nli, pairs)
+    nli_scores = run_nli_top_label(nli, pairs)
     print("NLI SCORES:", nli_scores)
     labels = [r["label"] for r in nli_scores]
 
@@ -39,7 +39,7 @@ def run_stage1_kb_check(collection, transformer, nli, query, top_k=1, gap_thresh
         label = 1
     elif majority_label == "contradiction" or majority_label == "neutral":
         pairs = [(row.get("fact_text", ""), query) for row in candidate_rows]
-        nli_scores = run_nli(nli, pairs)
+        nli_scores = run_nli_top_label(nli, pairs)
         label_count = Counter([r["label"] for r in nli_scores])
         majority_label = label_count.most_common(1)[0][0]
         print("MAJORITY LABEL FAKTA:", majority_label)
