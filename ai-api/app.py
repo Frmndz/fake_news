@@ -1,6 +1,5 @@
-import asyncio
-asyncio.set_event_loop_policy(asyncio.WindowsProactorEventLoopPolicy())
-
+import init
+load_init()
 from fastapi import FastAPI
 from contextlib import asynccontextmanager
 

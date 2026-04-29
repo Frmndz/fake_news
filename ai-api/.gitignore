@@ -5,3 +5,4 @@ chroma_db/
 .env
 *.pyc
 __pycache__/
+init.py

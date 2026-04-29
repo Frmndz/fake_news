@@ -256,14 +256,14 @@ if __name__ == "__main__":
     parser.add_argument(
         "--step",
         type=str,
-        choices=["seed", "clear","delete", "model","nli" ,"playwright","mysql","all"],
+        choices=["seed", "clear", "delete", "model", "nli", "playwright", "mysql", "all"],
         default="all",
         help="Step yang dijalankan"
     )
 
     args = parser.parse_args()
 
-    # Init Chroma dari config (bukan dari sini lagi)
+    # Init Chroma dari config
     collection = get_chroma_collection()
 
     if args.step == "clear":
@@ -281,9 +281,18 @@ if __name__ == "__main__":
     elif args.step == "mysql":
         seed_csv_to_mysql(CSV_PATH)
     elif args.step == "all":
+        print("🛠️ Menjalankan SEMUA proses setup...")
+        
+        # 1. Database & Vector Store
         clear_chroma(collection)
         seed_parquet_to_chroma(collection)
         seed_csv_to_mysql(CSV_PATH)
+        
+        # 2. Models
         download_model()
+        download_nli_model()
+        
+        # 3. Environment/Browsers
+        download_playwright()
 
-    print("=== SETUP SELESAI ===")
+    print("\n=== SETUP SELESAI ===")
