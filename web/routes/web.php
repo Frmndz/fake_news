@@ -68,6 +68,12 @@ Route::prefix('auth/google')->group(function () {
     Route::get('/callback', [GoogleAuthController::class, 'callback'])->name('google.callback');
 });
 
+    Route::get('/pencarian', [PencarianController::class, 'index'])->name('beranda');
+    Route::get('/pencarian-terpopuler', function () {
+        return view('user.pencarian-terpopuler');
+    })->name('pencarian.populer');
+    Route::post('/telusuri', [PencarianController::class, 'telusuri'])->name('telusuri');
+    Route::post('/telusuri-gambar', [PencarianController::class, 'telusuriGambar'])->name('telusuri.gambar');
 
 /*
 |--------------------------------------------------------------------------
