@@ -68,5 +68,20 @@ class UserController extends Controller
             'user' => $user
         ]);
     }
+
+    /**
+     * Return JSON data semua user buat admin
+     */
+    public function getUserData()
+    {
+        // Ambil semua data user
+        $users = User::all();
+
+        return response()->json([
+            'status' => 'success',
+            'message' => 'Data pengguna berhasil dimuat.',
+            'data' => $users
+        ]);
+    }
 }
 

@@ -80,9 +80,11 @@ Route::prefix('admin')->group(function () {
 
     // User
     Route::get('/user', [UserController::class, 'index']);
+    Route::get('/user-data', [UserController::class, 'getUserData']);
 
     // Umpan balik
     Route::get('/umpanbalik', [UmpanBalikController::class, 'index']);
+    Route::get('/umpanbalik-data', [UmpanBalikController::class, 'getFeedbackData']);
 
     // Riwayat
     Route::prefix('riwayat')->group(function () {
