@@ -3,8 +3,7 @@
    ========================================================== */
 .lh-navbar,
 .lh-navbar--desktop {
-    position: fixed;
-    top: 0;
+    position: relative;
     z-index: 10;
     width: 100%;
     height: 74px;
@@ -719,7 +718,7 @@
     }
 
     body {
-        padding-top: 74px !important; /* untuk menghindari konten tertutup navbar */
+        padding-top: 0 !important;
         padding-bottom: 0 !important;
     }
 }
